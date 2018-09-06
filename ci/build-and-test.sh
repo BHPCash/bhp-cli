@@ -1,8 +1,8 @@
 #!/bin/bash
 #
-# This script builds neo-cli with dotnet 2.0, and runs the tests.
+# This script builds bhp-cli with dotnet 2.0, and runs the tests.
 #
-CONTAINER_NAME="neo-cli-ci"
+CONTAINER_NAME="bhp-cli-ci"
 
 # Get absolute path of code and ci folder. This allows to run this script from
 # anywhere, whether from inside this directory or outside.
@@ -11,7 +11,7 @@ DIR_BASE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
 # echo "CI directory: $DIR_CI"
 # echo "Base directory: $DIR_BASE"
 
-# Build the Docker image (includes building the current neo-cli code)
+# Build the Docker image (includes building the current bhp-cli code)
 # docker build --no-cache -f $DIR_CI/Dockerfile -t $CONTAINER_NAME $DIR_BASE
 docker build -f $DIR_CI/Dockerfile -t $CONTAINER_NAME $DIR_BASE
 

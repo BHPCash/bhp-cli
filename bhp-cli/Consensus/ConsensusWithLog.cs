@@ -18,7 +18,7 @@ namespace Bhp.Consensus
         protected override void Log(string message)
         {
             DateTime now = DateTime.Now;
-            string line = $"[{now.TimeOfDay:hh\\:mm\\:ss}] {message}";
+            string line = $"[{now.TimeOfDay:hh\\:mm\\:ss\\:fff}] {message}";
             Console.WriteLine(line);
             if (string.IsNullOrEmpty(log_dictionary)) return;
             lock (log_dictionary)

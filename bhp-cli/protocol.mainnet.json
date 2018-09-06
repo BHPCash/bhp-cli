@@ -13,11 +13,11 @@
       "02486fd15702c4490a26703112a5cc1d0923fd697a33406bd5a1c00e0013b09a70"
     ],
     "SeedList": [
-      "seed1.neo.org:10333",
-      "seed2.neo.org:10333",
-      "seed3.neo.org:10333",
-      "seed4.neo.org:10333",
-      "seed5.neo.org:10333"
+      "seed1.Bhp.org:10333",
+      "seed2.Bhp.org:10333",
+      "seed3.Bhp.org:10333",
+      "seed4.Bhp.org:10333",
+      "seed5.Bhp.org:10333"
     ],
     "SystemFee": {
       "EnrollmentTransaction": 1000,

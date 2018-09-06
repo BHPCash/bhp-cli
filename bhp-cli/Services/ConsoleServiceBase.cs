@@ -129,8 +129,9 @@ namespace Bhp.Services
                     Console.Write($"{Prompt}> ");
                 }
 
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                string line = Console.ReadLine().Trim();
+                Console.ForegroundColor = ConsoleColor.Yellow; 
+                string line = Console.ReadLine()?.Trim();
+                if (line == null) break;
                 Console.ForegroundColor = ConsoleColor.White;
 
                 string[] args = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -140,13 +141,8 @@ namespace Bhp.Services
                 {
                     running = OnCommand(args);
                 }
-                catch (Exception ex)
-                {
-#if DEBUG
-                    Console.WriteLine($"error: {ex.Message}");
-#else
-                    Console.WriteLine("error");
-#endif
+                catch (Exception)
+                { 
                 }
             }
 

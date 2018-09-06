@@ -1,5 +1,5 @@
 ﻿using Bhp.Core;
-using Bhp.Implementations.Wallets.NEP6;
+using Bhp.Implementations.Wallets.BHP6;
 using Bhp.IO;
 using Bhp.IO.Json;
 using Bhp.SmartContract;
@@ -48,6 +48,11 @@ namespace Bhp.Network.RPC
                         }
                         return json;
                     }
+                case "getwalletheight":
+                    if (Program.Wallet == null)
+                        throw new RpcException(-400, "Access denied.");
+                    else
+                        return (Program.Wallet.WalletHeight > 0) ? Program.Wallet.WalletHeight - 1 : 0;
                 case "listaddress":
                     if (Program.Wallet == null)
                         throw new RpcException(-400, "Access denied.");
@@ -191,10 +196,11 @@ namespace Bhp.Network.RPC
                     else
                     {
                         WalletAccount account = Program.Wallet.CreateAccount();
-                        if (Program.Wallet is NEP6Wallet wallet)
+                        if (Program.Wallet is BHP6Wallet wallet)
                             wallet.Save();
                         return account.Address;
                     }
+                /*
                 case "dumpprivkey":
                     if (Program.Wallet == null)
                         throw new RpcException(-400, "Access denied");
@@ -204,6 +210,7 @@ namespace Bhp.Network.RPC
                         WalletAccount account = Program.Wallet.GetAccount(scriptHash);
                         return account.GetKey().Export();
                     }
+                    */
                 case "invoke":
                 case "invokefunction":
                 case "invokescript":

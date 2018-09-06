@@ -5,11 +5,11 @@
       "ApplicationLogs": "ApplicationLogs_{0}"
     },
     "P2P": {
-      "Port": 40556,
-      "WsPort": 40558
+      "Port": 10557,
+      "WsPort": 10558
     },
     "RPC": {
-      "Port": 40555,
+      "Port": 10556,
       "SslCert": "",
       "SslCertPassword": ""
     },
@@ -17,7 +17,6 @@
       "Path": "",
       "Password": "",
       "StartConsensus": false,
-      "IsActive": false
-    }
+      "IsActive": false    }
   }
 }

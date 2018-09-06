@@ -2,7 +2,7 @@
 using Bhp.Core;
 using Bhp.Implementations.Blockchains.LevelDB;
 using Bhp.Implementations.Wallets.EntityFramework;
-using Bhp.Implementations.Wallets.NEP6;
+using Bhp.Implementations.Wallets.BHP6;
 using Bhp.IO;
 using Bhp.IO.Json;
 using Bhp.Network;
@@ -11,7 +11,7 @@ using Bhp.Network.RPC;
 using Bhp.Services;
 using Bhp.SmartContract;
 using Bhp.VM;
-using Bhp.Wallets; 
+using Bhp.Wallets;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,9 +35,9 @@ namespace Bhp.Shell
 
         protected LocalNode LocalNode { get; private set; }
         protected override string Prompt => "bhp";
-        public override string ServiceName => "BHP-CLI";
+        public override string ServiceName => "bhp-cli";
 
-		private void ImportBlocks(Stream stream, bool read_start = false)
+        private void ImportBlocks(Stream stream, bool read_start = false)
         {
             LevelDBBlockchain blockchain = (LevelDBBlockchain)Blockchain.Default;
             using (BinaryReader r = new BinaryReader(stream))
@@ -251,7 +251,7 @@ namespace Bhp.Shell
                 }
             });
 
-            if (Program.Wallet is NEP6Wallet wallet)
+            if (Program.Wallet is BHP6Wallet wallet)
                 wallet.Save();
             Console.WriteLine();
             string path = "address.txt";
@@ -259,7 +259,7 @@ namespace Bhp.Shell
             File.WriteAllLines(path, addresses);
             return true;
         }
-
+        
         private bool OnCreateWalletCommand(string[] args)
         {
             if (args.Length < 3)
@@ -292,7 +292,7 @@ namespace Bhp.Shell
                     break;
                 case ".json":
                     {
-                        NEP6Wallet wallet = new NEP6Wallet(path);
+                        BHP6Wallet wallet = new BHP6Wallet(path);
                         wallet.Unlock(password);
                         WalletAccount account = wallet.CreateAccount();
                         wallet.Save();
@@ -307,6 +307,7 @@ namespace Bhp.Shell
             }
             return true;
         }
+        
 
         private bool OnExportCommand(string[] args)
         {
@@ -514,7 +515,7 @@ namespace Bhp.Shell
             if (m < 1 || m > n || n > 1024)
             {
                 Console.WriteLine("Error. Invalid parameters.");
-				return true;
+                return true;
             }
 
             ECPoint[] publicKeys = args.Skip(3).Select(p => ECPoint.Parse(p, ECCurve.Secp256r1)).ToArray();
@@ -523,7 +524,7 @@ namespace Bhp.Shell
             KeyPair keyPair = Program.Wallet.GetAccounts().FirstOrDefault(p => p.HasKey && publicKeys.Contains(p.GetKey().PublicKey))?.GetKey();
 
             WalletAccount account = Program.Wallet.CreateAccount(multiSignContract, keyPair);
-            if (Program.Wallet is NEP6Wallet wallet)
+            if (Program.Wallet is BHP6Wallet wallet)
                 wallet.Save();
 
             Console.WriteLine("Multisig. Addr.: " + multiSignContract.Address);
@@ -567,7 +568,7 @@ namespace Bhp.Shell
                 Console.WriteLine($"address: {account.Address}");
                 Console.WriteLine($" pubkey: {account.GetKey().PublicKey.EncodePoint(true).ToHexString()}");
             }
-            if (Program.Wallet is NEP6Wallet wallet)
+            if (Program.Wallet is BHP6Wallet wallet)
                 wallet.Save();
             return true;
         }
@@ -739,12 +740,12 @@ namespace Bhp.Shell
             UIntBase assetId;
             switch (args[1].ToLower())
             {
-                case "neo":
-                case "ans":
+                case "bhp":
+                //case "ans":
                     assetId = Blockchain.GoverningToken.Hash;
                     break;
                 case "gas":
-                case "anc":
+                //case "anc":
                     assetId = Blockchain.UtilityToken.Hash;
                     break;
                 default:
@@ -873,12 +874,12 @@ namespace Bhp.Shell
                 UInt256 assetId;
                 switch (args[2].ToLower())
                 {
-                    case "neo":
-                    case "ans":
+                    case "bhp":
+                    //case "ans":
                         assetId = Blockchain.GoverningToken.Hash;
                         break;
                     case "gas":
-                    case "anc":
+                    //case "anc":
                         assetId = Blockchain.UtilityToken.Hash;
                         break;
                     default:
@@ -1065,7 +1066,7 @@ namespace Bhp.Shell
                 return true;
             }
             string path_new = Path.ChangeExtension(path, ".json");
-            NEP6Wallet.Migrate(path_new, path, password).Save();
+            BHP6Wallet.Migrate(path_new, path, password).Save();
             Console.WriteLine($"Wallet file upgrade complete. New wallet file has been auto-saved at: {path_new}");
             return true;
         }
@@ -1078,9 +1079,9 @@ namespace Bhp.Shell
             }
             else
             {
-                NEP6Wallet nep6wallet = new NEP6Wallet(path);
-                nep6wallet.Unlock(password);
-                return nep6wallet;
+                BHP6Wallet BHP6wallet = new BHP6Wallet(path);
+                BHP6wallet.Unlock(password);
+                return BHP6wallet;
             }
         }
         private static bool NoWallet()
@@ -1094,10 +1095,10 @@ namespace Bhp.Shell
         {
             JObject json = new JObject();
             json["txid"] = e.Transaction.Hash.ToString();
-            json["vmstate"] = e.VMState;
-            json["gas_consumed"] = e.GasConsumed.ToString();
-            json["stack"] = e.Stack.Select(p => p.ToParameter().ToJson()).ToArray();
-            json["notifications"] = e.Notifications.Select(p =>
+            json["vmstate"] = e.ExecutionResults[0].VMState;
+            json["gas_consumed"] = e.ExecutionResults[0].GasConsumed.ToString();
+            json["stack"] = e.ExecutionResults[0].Stack.Select(p => p.ToParameter().ToJson()).ToArray();
+            json["notifications"] = e.ExecutionResults[0].Notifications.Select(p =>
             {
                 JObject notification = new JObject();
                 notification["contract"] = p.ScriptHash.ToString();

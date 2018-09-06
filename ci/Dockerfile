@@ -17,14 +17,14 @@ RUN rm -rf /var/lib/apt/lists/*
 WORKDIR /opt
 
 # Get code to test
-ADD neo-cli /opt/neo-cli-github
+ADD bhp-cli /opt/bhp-cli-github
 ADD ci /opt/ci
 
-WORKDIR /opt/neo-cli-github
+WORKDIR /opt/bhp-cli-github
 
 # Build the project
 RUN dotnet restore
 RUN dotnet publish -c Release
-RUN mv bin/Release/netcoreapp2.0/publish /opt/neo-cli
+RUN mv bin/Release/netcoreapp2.0/publish /opt/bhp-cli
 
 WORKDIR /opt
