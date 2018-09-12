@@ -5,7 +5,7 @@
     <AssemblyTitle>Neo.CLI</AssemblyTitle>
     <Version>1.0.0</Version>
     <Authors>The Bhp Project</Authors>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <AssemblyName>bhp-cli</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>Bhp.CLI</PackageId>
@@ -13,6 +13,8 @@
     <Company>The Bhp Project</Company>
     <Product>Bhp.CLI</Product>
     <Description>Bhp.CLI</Description>
+    <RepositoryUrl>https://github.com/BHPCash/bhp-cli.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/BHPCash/bhp-cli</PackageProjectUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -21,8 +23,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\bhp-2.8.0\bhp\bhp.csproj" />
-    <ProjectReference Include="..\..\bhp-vm-2.3.1\src\bhp-vm\bhp-vm.csproj" />
+    <ProjectReference Include="..\..\bhp-toolkit\bhp-toolkit.csproj" />
+    <ProjectReference Include="..\..\bhp-vm\src\bhp-vm\bhp-vm.csproj" />
+    <ProjectReference Include="..\..\bhp\bhp\bhp.csproj" />
   </ItemGroup>
 
   <ItemGroup>
